@@ -1,11 +1,10 @@
 //! Dispatches by block name to generators; parses tag options and fills block body.
 
-use std::collections::HashSet;
-
 use crate::error::Result;
 use crate::generators::badges::{self as badges_gen, BadgesConfig};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::parser::cargo::ParsedManifest;
+use crate::parser::tag_options::{option_bool, parse_tag_options};
 
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
@@ -28,49 +27,22 @@ pub trait BlockHandler: Send + Sync {
 }
 
 fn parse_badges_config(open_tag: &str) -> BadgesConfig {
-    let mut on: HashSet<&str> = HashSet::new();
-    let t = open_tag.trim();
-    if let Some(rest) = t
-        .strip_prefix("<!-- automdrs:badges")
-        .and_then(|r| r.strip_suffix("-->"))
-    {
-        for w in rest.split_whitespace() {
-            on.insert(w);
-        }
-    }
+    let opts = parse_tag_options(open_tag, "badges");
     BadgesConfig {
-        version: on.contains("version"),
-        downloads: on.contains("downloads"),
-        docs: on.contains("docs"),
-        commit_activity: on.contains("commit_activity"),
-        repo_stars: on.contains("repo_stars"),
+        version: option_bool(&opts, &["showCrateVersion", "version"]),
+        downloads: option_bool(&opts, &["showCrateDownloads", "downloads"]),
+        docs: option_bool(&opts, &["showCrateDocs", "docs"]),
+        commit_activity: option_bool(&opts, &["showCommitActivity", "commit_activity"]),
+        repo_stars: option_bool(&opts, &["showRepoStars", "repo_stars"]),
     }
 }
 
 fn parse_contributors_config(open_tag: &str) -> ContributorsConfig {
-    let mut on = ContributorsConfig::default();
-    let t = open_tag.trim();
-    if let Some(rest) = t
-        .strip_prefix("<!-- automdrs:contributors")
-        .and_then(|r| r.strip_suffix("-->"))
-    {
-        // Parse key="value" or key='value' attributes
-        for w in rest.split_whitespace() {
-            if let Some((key, value)) = w.split_once('=') {
-                let value = value
-                    .strip_prefix('"')
-                    .and_then(|s| s.strip_suffix('"'))
-                    .or_else(|| value.strip_prefix('\'').and_then(|s| s.strip_suffix('\'')))
-                    .unwrap_or(value);
-                match key {
-                    "author" => on.author = value.to_string(),
-                    "license" => on.license = value.to_string(),
-                    _ => (),
-                }
-            }
-        }
+    let opts = parse_tag_options(open_tag, "contributors");
+    ContributorsConfig {
+        author: opts.get("author").cloned().unwrap_or_default(),
+        license: opts.get("license").cloned().unwrap_or_default(),
     }
-    on
 }
 
 #[derive(Debug, Default)]

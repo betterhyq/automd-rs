@@ -1,6 +1,6 @@
 # automd-rs
 
-<!-- automdrs:badges version downloads docs commit_activity repo_stars -->
+<!-- automdrs:badges showCrateVersion="true" showCrateDownloads="true" showCrateDocs="true" showCommitActivity="true" showRepoStars="true" -->
 ![Crates.io Version](https://img.shields.io/crates/v/automd-rs)
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/automd-rs)
 ![docs.rs](https://img.shields.io/docsrs/automd-rs)
