@@ -76,4 +76,28 @@ mod tests {
         assert_eq!(user, "foo");
         assert_eq!(repo, "bar");
     }
+
+    #[test]
+    fn test_parse_repository_url_invalid() {
+        assert!(parse_repository_url("not-a-url").is_err());
+        assert!(parse_repository_url("https://github.com/onlyone").is_err());
+    }
+
+    #[test]
+    fn test_parse() {
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let result = parse(dir);
+        assert!(result.is_ok());
+        let m = result.unwrap();
+        assert_eq!(m.name, "automd-rs");
+        assert!(!m.username.is_empty());
+        assert!(!m.repository_name.is_empty());
+    }
+
+    #[test]
+    fn test_parse_not_found() {
+        let dir = std::env::temp_dir();
+        let result = parse(&dir);
+        assert!(result.is_err());
+    }
 }

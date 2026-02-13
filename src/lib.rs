@@ -46,3 +46,62 @@ pub fn run_with_handler(
     std::fs::write(readme_path, &updated)?;
     Ok(updated)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Write;
+
+    #[test]
+    fn test_run_with_handler() {
+        let dir = std::env::temp_dir().join("automd_rs_test");
+        let _ = std::fs::create_dir_all(&dir);
+        let cargo_toml = dir.join("Cargo.toml");
+        let readme = dir.join("README.md");
+        std::fs::write(
+            &cargo_toml,
+            r#"
+[package]
+name = "test-pkg"
+version = "0.1.0"
+repository = "https://github.com/foo/bar.git"
+"#,
+        )
+        .unwrap();
+        std::fs::write(
+            &readme,
+            "Title\n\n<!-- automdrs:badges version -->\n<!-- /automdrs -->\n",
+        )
+        .unwrap();
+        let result = run_with_handler(&dir, &readme, &crate::handler::DefaultHandler::default());
+        let out = result.unwrap();
+        assert!(out.contains("crates/v/test-pkg"));
+        assert!(out.contains("<!-- automdrs:badges version -->"));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn test_run() {
+        let dir = std::env::temp_dir().join("automd_rs_test_run");
+        let _ = std::fs::create_dir_all(&dir);
+        let cargo_toml = dir.join("Cargo.toml");
+        let readme = dir.join("README.md");
+        std::fs::write(
+            &cargo_toml,
+            r#"
+[package]
+name = "run-pkg"
+version = "0.1.0"
+repository = "https://github.com/a/b.git"
+"#,
+        )
+        .unwrap();
+        std::fs::write(&readme, "Hi\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\n")
+            .unwrap();
+        let result = run(&dir, &readme);
+        assert!(result.is_ok());
+        let out = result.unwrap();
+        assert!(out.contains("automd-rs"));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+}

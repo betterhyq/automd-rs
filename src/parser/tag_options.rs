@@ -108,4 +108,25 @@ mod tests {
         assert!(option_bool(&opts, &["missing", "on"]));
         assert!(!option_bool(&opts, &["missing"]));
     }
+
+    #[test]
+    fn test_option_bool_yes_no_1_0() {
+        let opts: HashMap<String, String> = [
+            ("y".to_string(), "yes".to_string()),
+            ("n".to_string(), "no".to_string()),
+            ("one".to_string(), "1".to_string()),
+            ("zero".to_string(), "0".to_string()),
+        ]
+        .into();
+        assert!(option_bool(&opts, &["y"]));
+        assert!(!option_bool(&opts, &["n"]));
+        assert!(option_bool(&opts, &["one"]));
+        assert!(!option_bool(&opts, &["zero"]));
+    }
+
+    #[test]
+    fn test_parse_tag_options_wrong_block_name() {
+        let opts = parse_tag_options("<!-- automdrs:other version -->", "badges");
+        assert!(opts.is_empty());
+    }
 }

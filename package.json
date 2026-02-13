@@ -4,7 +4,7 @@
     "build:release": "cargo build --release",
     "format": "cargo fmt",
     "test": "cargo test -- --show-output",
-    "test:coverage": "cargo tarpaulin",
+    "test:coverage": "cargo tarpaulin --fail-under 85 --exclude-files 'src/main.rs'",
     "start": "node scripts/packageName.mjs"
   },
   "simple-git-hooks": {

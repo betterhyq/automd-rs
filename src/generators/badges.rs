@@ -55,3 +55,55 @@ pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String>
     trace!("lines: {:?}", lines);
     lines
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::parser::cargo::ParsedManifest;
+
+    fn manifest() -> ParsedManifest {
+        ParsedManifest {
+            name: "my-crate".to_string(),
+            username: "user".to_string(),
+            repository_name: "repo".to_string(),
+        }
+    }
+
+    #[test]
+    fn test_generate_empty() {
+        let config = BadgesConfig::default();
+        let out = generate(&config, &manifest());
+        assert_eq!(out, Vec::<String>::new());
+    }
+
+    #[test]
+    fn test_generate_version_docs_repo_stars() {
+        let config = BadgesConfig {
+            version: true,
+            downloads: false,
+            docs: true,
+            commit_activity: false,
+            repo_stars: true,
+        };
+        let out = generate(&config, &manifest());
+        assert_eq!(out.len(), 3);
+        assert!(out[0].contains("crates/v/my-crate"));
+        assert!(out[1].contains("docsrs/my-crate"));
+        assert!(out[2].contains("github/stars/user/repo"));
+    }
+
+    #[test]
+    fn test_generate_downloads_commit_activity() {
+        let config = BadgesConfig {
+            version: false,
+            downloads: true,
+            docs: false,
+            commit_activity: true,
+            repo_stars: false,
+        };
+        let out = generate(&config, &manifest());
+        assert_eq!(out.len(), 2);
+        assert!(out[0].contains("crates/d/my-crate"));
+        assert!(out[1].contains("commit-activity/m/user/repo"));
+    }
+}

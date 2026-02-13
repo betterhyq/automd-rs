@@ -88,3 +88,69 @@ impl BlockHandler for DefaultHandler {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::parser::cargo::ParsedManifest;
+
+    fn context() -> UpdateContext {
+        UpdateContext::new(ParsedManifest {
+            name: "test-crate".to_string(),
+            username: "u".to_string(),
+            repository_name: "r".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_update_context_new() {
+        let ctx = context();
+        assert_eq!(ctx.config.name, "test-crate");
+    }
+
+    #[test]
+    fn test_generate_badges() {
+        let h = DefaultHandler::default();
+        let out = h
+            .generate(
+                "badges",
+                "<!-- automdrs:badges version docs -->",
+                &context(),
+            )
+            .unwrap();
+        assert!(!out.is_empty());
+        assert!(out[0].contains("crates/v/test-crate"));
+    }
+
+    #[test]
+    fn test_generate_contributors() {
+        let h = DefaultHandler::default();
+        let out = h
+            .generate(
+                "contributors",
+                "<!-- automdrs:contributors author=\"A\" license=\"MIT\" -->",
+                &context(),
+            )
+            .unwrap();
+        assert_eq!(out.len(), 1);
+        assert!(out[0].contains("A"));
+        assert!(out[0].contains("MIT"));
+    }
+
+    #[test]
+    fn test_generate_with_automdrs() {
+        let h = DefaultHandler::default();
+        let out = h
+            .generate("with-automdrs", "<!-- automdrs:with-automdrs -->", &context())
+            .unwrap();
+        assert_eq!(out.len(), 1);
+        assert!(out[0].contains("automd-rs"));
+    }
+
+    #[test]
+    fn test_generate_unknown_block() {
+        let h = DefaultHandler::default();
+        let out = h.generate("unknown", "<!-- automdrs:unknown -->", &context()).unwrap();
+        assert_eq!(out, Vec::<String>::new());
+    }
+}

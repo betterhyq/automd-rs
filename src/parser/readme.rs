@@ -149,4 +149,42 @@ mod tests {
         assert!(out.contains("<!-- /automdrs -->"));
         assert!(out.contains("Rest"));
     }
+
+    #[test]
+    fn test_assign_and_generate() {
+        let requests = vec![
+            BlockRequest {
+                name: "badges".to_string(),
+                open_tag_line: "<!-- automdrs:badges version -->".to_string(),
+            },
+            BlockRequest {
+                name: "unknown".to_string(),
+                open_tag_line: "<!-- automdrs:unknown -->".to_string(),
+            },
+        ];
+        let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
+            name: "x".to_string(),
+            username: "u".to_string(),
+            repository_name: "r".to_string(),
+        });
+        let handler = crate::handler::DefaultHandler::default();
+        let out = assign_and_generate(&requests, &handler, &ctx).unwrap();
+        assert_eq!(out.len(), 2);
+        assert!(!out[0].is_empty());
+        assert!(out[1].is_empty());
+    }
+
+    #[test]
+    fn test_update_readme() {
+        let content = "P\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\nQ";
+        let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
+            name: "n".to_string(),
+            username: "u".to_string(),
+            repository_name: "r".to_string(),
+        });
+        let out = update_readme(content, &crate::handler::DefaultHandler::default(), &ctx).unwrap();
+        assert!(out.contains("automd-rs"));
+        assert!(out.contains("P"));
+        assert!(out.contains("Q"));
+    }
 }

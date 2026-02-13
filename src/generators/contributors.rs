@@ -28,3 +28,27 @@ pub fn generate(config: &ContributorsConfig, manifest: &ParsedManifest) -> Vec<S
         repository_name = manifest.repository_name
     )]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::parser::cargo::ParsedManifest;
+
+    #[test]
+    fn test_generate() {
+        let config = ContributorsConfig {
+            author: "YONGQI".to_string(),
+            license: "MIT".to_string(),
+        };
+        let manifest = ParsedManifest {
+            name: "automd-rs".to_string(),
+            username: "betterhyq".to_string(),
+            repository_name: "automd-rs".to_string(),
+        };
+        let out = generate(&config, &manifest);
+        assert_eq!(out.len(), 1);
+        assert!(out[0].contains("YONGQI"));
+        assert!(out[0].contains("MIT"));
+        assert!(out[0].contains("betterhyq/automd-rs"));
+    }
+}
