@@ -12,7 +12,7 @@ pub use parser::readme::{
     BlockRequest, assign_and_generate, parse_readme_blocks, replace_blocks_once, update_readme,
 };
 
-use log::info;
+use log::trace;
 use std::path::Path;
 
 pub fn run(manifest_dir: &Path, readme_path: &Path) -> Result<String> {
@@ -26,15 +26,23 @@ pub fn run_with_handler(
     handler: &dyn BlockHandler,
 ) -> Result<String> {
     let config = parser::cargo::parse(manifest_dir)?;
-    info!("config: {:?}", config);
+    trace!("config: {:?}", config);
 
     let readme_content = std::fs::read_to_string(readme_path)?;
+    trace!("readme_content: {:?}", readme_content);
 
     let context = UpdateContext::new(config);
+    trace!("context: {:?}", context);
+
     let requests = parser::readme::parse_readme_blocks(&readme_content);
+    trace!("requests: {:?}", requests);
+
     let generated = parser::readme::assign_and_generate(&requests, handler, &context)?;
-    info!("generated: {:?}", generated);
+    trace!("generated: {:?}", generated);
+
     let updated = parser::readme::replace_blocks_once(&readme_content, &generated);
+    trace!("updated: {:?}", updated);
+    
     std::fs::write(readme_path, &updated)?;
     Ok(updated)
 }

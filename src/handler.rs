@@ -6,7 +6,7 @@ use crate::generators::contributors::{self as contributors_gen, ContributorsConf
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
 
-use log::info;
+use log::trace;
 
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
@@ -30,7 +30,7 @@ pub trait BlockHandler: Send + Sync {
 
 fn parse_badges_config(open_tag: &str) -> BadgesConfig {
     let opts = parse_tag_options(open_tag, "badges");
-    info!("opts: {:?}", opts);
+    trace!("badges config: {:?}", opts);
     BadgesConfig {
         version: option_bool(&opts, &["showCrateVersion", "version"]),
         downloads: option_bool(&opts, &["showCrateDownloads", "downloads"]),
@@ -42,7 +42,7 @@ fn parse_badges_config(open_tag: &str) -> BadgesConfig {
 
 fn parse_contributors_config(open_tag: &str) -> ContributorsConfig {
     let opts = parse_tag_options(open_tag, "contributors");
-    info!("opts: {:?}", opts);
+    trace!("contributors config: {:?}", opts);
     ContributorsConfig {
         author: opts.get("author").cloned().unwrap_or_default(),
         license: opts.get("license").cloned().unwrap_or_default(),
@@ -61,10 +61,12 @@ impl BlockHandler for DefaultHandler {
     ) -> Result<Vec<String>> {
         match block_name {
             "badges" => {
+                trace!("parsing badges config");
                 let config = parse_badges_config(open_tag_line);
                 Ok(badges_gen::generate(&config, &context.config))
             }
             "contributors" => {
+                trace!("parsing contributors config");
                 let config = parse_contributors_config(open_tag_line);
                 Ok(contributors_gen::generate(&config, &context.config))
             }

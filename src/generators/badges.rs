@@ -2,7 +2,7 @@
 
 use crate::parser::cargo::ParsedManifest;
 
-use log::info;
+use log::trace;
 
 #[derive(Debug, Default, Clone)]
 pub struct BadgesConfig {
@@ -14,8 +14,8 @@ pub struct BadgesConfig {
 }
 
 pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String> {
-    info!("config: {:?}", config);
-    info!("manifest: {:?}", manifest);
+    trace!("config: {:?}", config);
+    trace!("manifest: {:?}", manifest);
     let n = config.version as usize
         + config.downloads as usize
         + config.docs as usize
@@ -52,6 +52,6 @@ pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String>
             manifest.username, manifest.repository_name
         ));
     }
-    info!("lines: {:?}", lines);
+    trace!("lines: {:?}", lines);
     lines
 }

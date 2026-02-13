@@ -5,6 +5,7 @@ use c12_parser::{FormatOptions, Formatted, parse_toml};
 use serde::Deserialize;
 use std::path::Path;
 use url::Url;
+use log::trace;
 
 #[derive(Debug, Clone)]
 pub struct ParsedManifest {
@@ -25,6 +26,7 @@ struct Package {
 }
 
 fn parse_repository_url(repository: &str) -> Result<(String, String)> {
+    trace!("parsing repository url: {:?}", repository);
     let url = Url::parse(repository).map_err(|e| Error::InvalidRepoUrl(e.to_string()))?;
     let path = url.path();
     let parts: Vec<&str> = path.split('/').filter(|s| !s.is_empty()).collect();
@@ -36,10 +38,13 @@ fn parse_repository_url(repository: &str) -> Result<(String, String)> {
     }
     let username = parts[0];
     let repo = parts[1].strip_suffix(".git").unwrap_or(parts[1]);
+    trace!("username: {:?}", username);
+    trace!("repo: {:?}", repo);
     Ok((username.to_string(), repo.to_string()))
 }
 
 pub fn parse(manifest_dir: &Path) -> Result<ParsedManifest> {
+    trace!("parsing cargo.toml");
     let path = find_cargo_toml::find(manifest_dir, None::<std::path::PathBuf>, None)
         .next()
         .ok_or(Error::CargoTomlNotFound)?;
@@ -47,6 +52,8 @@ pub fn parse(manifest_dir: &Path) -> Result<ParsedManifest> {
     let toml: Formatted<CargoToml> = parse_toml(&content, Some(FormatOptions::default()))
         .map_err(|e| Error::CargoParse(e.to_string()))?;
     let name = toml.value.package.name;
+    trace!("name: {:?}", name);
+    trace!("repository: {:?}", toml.value.package.repository);
     let (username, repository_name) = parse_repository_url(&toml.value.package.repository)?;
     Ok(ParsedManifest {
         name,

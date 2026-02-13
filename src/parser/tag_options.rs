@@ -3,6 +3,7 @@
 
 use std::collections::HashMap;
 
+use log::trace;
 const OPEN_PREFIX: &str = "<!-- automdrs:";
 const OPEN_SUFFIX: &str = "-->";
 
@@ -14,6 +15,8 @@ const OPEN_SUFFIX: &str = "-->";
 /// - `<!-- automdrs:contributors author="YONGQI" license="MIT" -->` → {"author": "YONGQI", "license": "MIT"}
 /// - Mixed: `<!-- automdrs:badges showCrateVersion="true" docs -->` → {"showCrateVersion": "true", "docs": "true"}
 pub fn parse_tag_options(open_tag_line: &str, block_name: &str) -> HashMap<String, String> {
+    trace!("parsing tag options: {:?}", open_tag_line);
+    trace!("block name: {:?}", block_name);
     let mut out = HashMap::new();
     let t = open_tag_line.trim();
     let inner = t
@@ -39,6 +42,7 @@ pub fn parse_tag_options(open_tag_line: &str, block_name: &str) -> HashMap<Strin
             out.insert(w.to_string(), "true".to_string());
         }
     }
+    trace!("out: {:?}", out);
     out
 }
 
