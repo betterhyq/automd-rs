@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 
+use crate::manifest::ProjectConfig;
+
 /// Badges config: each field is true if that badge is enabled in README.
 #[derive(Debug, Default, Clone)]
 pub struct Badges {
@@ -52,4 +54,25 @@ pub fn generate_commit_activity_badge(username: &str, repository: &str) -> Strin
 
 pub fn generate_repo_stars_badge(username: &str, repository: &str) -> String {
     return format!("![GitHub Repo stars](https://img.shields.io/github/stars/{username}/{repository})");
+}
+
+/// Generate all enabled badge lines from project config and badge options.
+pub fn generate_all(config: &ProjectConfig, badges: &Badges) -> Vec<String> {
+    let mut lines = Vec::new();
+    if badges.version {
+        lines.push(generate_crate_version_badge(&config.crate_name));
+    }
+    if badges.downloads {
+        lines.push(generate_crate_downloads_badge(&config.crate_name));
+    }
+    if badges.docs {
+        lines.push(generate_crate_docs_badge(&config.crate_name));
+    }
+    if badges.commit_activity {
+        lines.push(generate_commit_activity_badge(&config.github_user, &config.github_repo));
+    }
+    if badges.repo_stars {
+        lines.push(generate_repo_stars_badge(&config.github_user, &config.github_repo));
+    }
+    lines
 }
