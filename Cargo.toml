@@ -11,7 +11,12 @@ license = "MIT"
 keywords = [""]
 categories = ["development-tools"]
 
+[[bin]]
+name = "automd-rs"
+path = "src/main.rs"
+
 [dependencies]
 c12-parser = "1.0.1"
 find-cargo-toml = "1.0.0"
 serde = { version = "1.0", features = ["derive"] }
+url = "2.5.8"
