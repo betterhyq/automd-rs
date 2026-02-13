@@ -33,7 +33,7 @@ fn parse_github_repository_url(repository: &str) -> (String, String) {
     let path = url.path();
     let parts = path.split('/').collect::<Vec<&str>>();
     let username = parts[1];
-    let repository = parts[2];
+    let repository = parts[2].strip_suffix(".git").unwrap();
     return (username.to_string(), repository.to_string());
 }
 
