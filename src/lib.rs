@@ -12,15 +12,17 @@ struct CargoToml {
 #[derive(Debug, Deserialize)]
 struct Package {
     name: String,
+    repository: String,
 }
 
-fn parse_cargo_toml() -> String {
+fn parse_cargo_toml() -> (String, String) {
     let cargo_toml = find_from_current_dir(".", None).next().unwrap();
     let cargo_toml_content = fs::read_to_string(cargo_toml).unwrap();
     let toml: Formatted<CargoToml> =
         parse_toml(&cargo_toml_content, Some(FormatOptions::default())).unwrap();
     let name = &toml.value.package.name;
-    return name.to_string();
+    let repository = &toml.value.package.repository;
+    return (name.to_string(), repository.to_string());
 }
 
 #[cfg(test)]
@@ -29,7 +31,8 @@ mod tests {
 
     #[test]
     fn test_parse_cargo_toml() {
-        let name = parse_cargo_toml();
+        let (name, repository) = parse_cargo_toml();
         assert_eq!(name, "automd-rs");
+        assert_eq!(repository, "https://github.com/betterhyq/automd-rs.git");
     }
 }
