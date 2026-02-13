@@ -7,10 +7,10 @@ pub mod parser;
 
 pub use error::{Error, Result};
 pub use handler::{BlockHandler, DefaultHandler, UpdateContext};
+pub use parser::cargo::{ParsedManifest, parse as parse_manifest};
 pub use parser::readme::{
-    assign_and_generate, parse_readme_blocks, replace_blocks_once, update_readme, BlockRequest,
+    BlockRequest, assign_and_generate, parse_readme_blocks, replace_blocks_once, update_readme,
 };
-pub use parser::cargo::{parse as parse_manifest, ParsedManifest};
 
 use std::path::Path;
 

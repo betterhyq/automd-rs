@@ -40,9 +40,11 @@ cargo add automd-rs
 
 ## License
 
+<!-- automdrs:contributors author="YONGQI" license="MIT" -->
 Published under the [MIT](./LICENSE) license.
 Made by [@YONGQI](https://github.com/betterhyq) 💛
 <br><br>
 <a href="https://github.com/betterhyq/automd-rs/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=betterhyq/automd-rs" />
 </a>
+<!-- /automdrs -->

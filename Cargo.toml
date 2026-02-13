@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/betterhyq/automd-rs"
 repository = "https://github.com/betterhyq/automd-rs.git"
 license = "MIT"
-keywords = [""]
+keywords = ["automd", "crates", "readme", "generator"]
 categories = ["development-tools"]
 
 [lib]

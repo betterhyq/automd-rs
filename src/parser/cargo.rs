@@ -1,7 +1,7 @@
 //! Cargo.toml parsing: find manifest → name, username, repository_name.
 
 use crate::error::{Error, Result};
-use c12_parser::{parse_toml, FormatOptions, Formatted};
+use c12_parser::{FormatOptions, Formatted, parse_toml};
 use serde::Deserialize;
 use std::path::Path;
 use url::Url;

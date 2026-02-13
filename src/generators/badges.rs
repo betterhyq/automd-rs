@@ -19,7 +19,10 @@ pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String>
         + config.repo_stars as usize;
     let mut lines = Vec::with_capacity(n);
     if config.version {
-        lines.push(format!("![Crates.io Version](https://img.shields.io/crates/v/{})", manifest.name));
+        lines.push(format!(
+            "![Crates.io Version](https://img.shields.io/crates/v/{})",
+            manifest.name
+        ));
     }
     if config.downloads {
         lines.push(format!(
@@ -28,7 +31,10 @@ pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String>
         ));
     }
     if config.docs {
-        lines.push(format!("![docs.rs](https://img.shields.io/docsrs/{})", manifest.name));
+        lines.push(format!(
+            "![docs.rs](https://img.shields.io/docsrs/{})",
+            manifest.name
+        ));
     }
     if config.commit_activity {
         lines.push(format!(

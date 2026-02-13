@@ -116,8 +116,14 @@ mod tests {
 
     #[test]
     fn test_parse_block_name() {
-        assert_eq!(parse_block_name("  <!-- automdrs:badges version -->  "), Some("badges"));
-        assert_eq!(parse_block_name("<!-- automdrs:contributors -->"), Some("contributors"));
+        assert_eq!(
+            parse_block_name("  <!-- automdrs:badges version -->  "),
+            Some("badges")
+        );
+        assert_eq!(
+            parse_block_name("<!-- automdrs:contributors -->"),
+            Some("contributors")
+        );
         assert_eq!(parse_block_name("<!-- automdrs:foo a b -->"), Some("foo"));
         assert_eq!(parse_block_name("<!-- other:tag -->"), None);
         assert_eq!(parse_block_name("not a tag"), None);
@@ -144,4 +150,3 @@ mod tests {
         assert!(out.contains("Rest"));
     }
 }
-

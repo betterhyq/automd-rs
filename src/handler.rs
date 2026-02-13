@@ -30,7 +30,10 @@ pub trait BlockHandler: Send + Sync {
 fn parse_badges_config(open_tag: &str) -> BadgesConfig {
     let mut on: HashSet<&str> = HashSet::new();
     let t = open_tag.trim();
-    if let Some(rest) = t.strip_prefix("<!-- automdrs:badges").and_then(|r| r.strip_suffix("-->")) {
+    if let Some(rest) = t
+        .strip_prefix("<!-- automdrs:badges")
+        .and_then(|r| r.strip_suffix("-->"))
+    {
         for w in rest.split_whitespace() {
             on.insert(w);
         }
@@ -42,6 +45,32 @@ fn parse_badges_config(open_tag: &str) -> BadgesConfig {
         commit_activity: on.contains("commit_activity"),
         repo_stars: on.contains("repo_stars"),
     }
+}
+
+fn parse_contributors_config(open_tag: &str) -> ContributorsConfig {
+    let mut on = ContributorsConfig::default();
+    let t = open_tag.trim();
+    if let Some(rest) = t
+        .strip_prefix("<!-- automdrs:contributors")
+        .and_then(|r| r.strip_suffix("-->"))
+    {
+        // Parse key="value" or key='value' attributes
+        for w in rest.split_whitespace() {
+            if let Some((key, value)) = w.split_once('=') {
+                let value = value
+                    .strip_prefix('"')
+                    .and_then(|s| s.strip_suffix('"'))
+                    .or_else(|| value.strip_prefix('\'').and_then(|s| s.strip_suffix('\'')))
+                    .unwrap_or(value);
+                match key {
+                    "author" => on.author = value.to_string(),
+                    "license" => on.license = value.to_string(),
+                    _ => (),
+                }
+            }
+        }
+    }
+    on
 }
 
 #[derive(Debug, Default)]
@@ -60,7 +89,7 @@ impl BlockHandler for DefaultHandler {
                 Ok(badges_gen::generate(&config, &context.config))
             }
             "contributors" => {
-                let config = ContributorsConfig::default();
+                let config = parse_contributors_config(open_tag_line);
                 Ok(contributors_gen::generate(&config, &context.config))
             }
             _ => Ok(vec![]),
