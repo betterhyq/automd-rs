@@ -1,12 +1,11 @@
 # automd-rs
 
+<!-- automdrs:badges version downloads docs commit_activity repo_stars -->
 ![Crates.io Version](https://img.shields.io/crates/v/automd-rs)
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/automd-rs)
 ![docs.rs](https://img.shields.io/docsrs/automd-rs)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/betterhyq/automd-rs)
-![GitHub Repo stars](https://img.shields.io/github/stars/betterhyq/automd-rs)
-
-<!-- automdrs:badges version downloads docs commit_activity repo_stars -->
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/betterhyq/automd-rs.git)
+![GitHub Repo stars](https://img.shields.io/github/stars/betterhyq/automd-rs.git)
 <!-- /automdrs -->
 
 `automd-rs` is
