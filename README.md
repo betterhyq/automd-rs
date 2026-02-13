@@ -1,19 +1,22 @@
-# packageName
+# automd-rs
 
-![Crates.io Version](https://img.shields.io/crates/v/packageName)
-![Crates.io Total Downloads](https://img.shields.io/crates/d/packageName)
-![docs.rs](https://img.shields.io/docsrs/packageName)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/betterhyq/packageName)
-![GitHub Repo stars](https://img.shields.io/github/stars/betterhyq/packageName)
+![Crates.io Version](https://img.shields.io/crates/v/automd-rs)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/automd-rs)
+![docs.rs](https://img.shields.io/docsrs/automd-rs)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/betterhyq/automd-rs)
+![GitHub Repo stars](https://img.shields.io/github/stars/betterhyq/automd-rs)
 
-`packageName` is
+<!-- automdrs:badges version downloads docs commit_activity repo_stars -->
+<!-- /automdrs -->
+
+`automd-rs` is
 
 ## Installation
 
 Add this crate by cargo
 
 ```bash
-cargo add packageName
+cargo add automd-rs
 ```
 
 ## Usage
@@ -34,13 +37,13 @@ cargo add packageName
 
 ## Credits
 
-`packageName` has been inspired by several outstanding projects in the community:
+`automd-rs` has been inspired by several outstanding projects in the community:
 
 ## License
 
 Published under the [MIT](./LICENSE) license.
 Made by [@YONGQI](https://github.com/betterhyq) 💛
 <br><br>
-<a href="https://github.com/betterhyq/packageName/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=betterhyq/packageName" />
+<a href="https://github.com/betterhyq/automd-rs/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=betterhyq/automd-rs" />
 </a>

@@ -3,5 +3,14 @@
 version = 4
 
 [[package]]
-name = "packageName"
+name = "automd-rs"
 version = "0.0.1"
+dependencies = [
+ "find-cargo-toml",
+]
+
+[[package]]
+name = "find-cargo-toml"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a569f721899c180b24afe704216742294ab7eec5d0eb91920774b19c7ae26b8a"
