@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::error::Result;
 use crate::handler::{BlockHandler, UpdateContext};
-use crate::manifest::ProjectConfig;
+use crate::toml_parser::ParsedManifest;
 
 /// Badges config: each field is true if that badge is enabled in README.
 #[derive(Debug, Default, Clone)]
@@ -54,23 +54,23 @@ pub fn generate_repo_stars_badge(username: &str, repository: &str) -> String {
     return format!("![GitHub Repo stars](https://img.shields.io/github/stars/{username}/{repository})");
 }
 
-/// Generate all enabled badge lines from project config and badge options.
-pub fn generate_all(config: &ProjectConfig, badges: &Badges) -> Vec<String> {
+/// Generate all enabled badge lines from parsed manifest and badge options.
+pub fn generate_all(config: &ParsedManifest, badges: &Badges) -> Vec<String> {
     let mut lines = Vec::new();
     if badges.version {
-        lines.push(generate_crate_version_badge(&config.crate_name));
+        lines.push(generate_crate_version_badge(&config.name));
     }
     if badges.downloads {
-        lines.push(generate_crate_downloads_badge(&config.crate_name));
+        lines.push(generate_crate_downloads_badge(&config.name));
     }
     if badges.docs {
-        lines.push(generate_crate_docs_badge(&config.crate_name));
+        lines.push(generate_crate_docs_badge(&config.name));
     }
     if badges.commit_activity {
-        lines.push(generate_commit_activity_badge(&config.github_user, &config.github_repo));
+        lines.push(generate_commit_activity_badge(&config.username, &config.repository_name));
     }
     if badges.repo_stars {
-        lines.push(generate_repo_stars_badge(&config.github_user, &config.github_repo));
+        lines.push(generate_repo_stars_badge(&config.username, &config.repository_name));
     }
     lines
 }
@@ -85,7 +85,7 @@ impl BlockHandler for BadgesHandler {
     }
 
     fn generate(&self, open_tag_line: &str, context: &UpdateContext) -> Result<Vec<String>> {
-        let badges = parse_badges_from_open_tag(open_tag_line);
-        Ok(generate_all(&context.config, &badges))
+        let opts = parse_badges_from_open_tag(open_tag_line);
+        Ok(generate_all(&context.config, &opts))
     }
 }

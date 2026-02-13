@@ -6,17 +6,16 @@
 pub mod badges;
 pub mod contributors;
 pub mod error;
-pub mod github;
 pub mod handler;
-pub mod manifest;
 pub mod readme;
+pub mod toml_parser;
 
 pub use error::{Error, Result};
 pub use handler::{BlockHandler, UpdateContext};
-pub use manifest::ProjectConfig;
 pub use readme::{
     assign_and_generate, parse_readme_blocks, replace_blocks_once, update_readme, BlockRequest,
 };
+pub use toml_parser::{parse, ParsedManifest};
 
 use std::path::Path;
 
@@ -41,7 +40,7 @@ pub fn run_with_handlers(
     readme_path: &Path,
     handlers: &[&dyn BlockHandler],
 ) -> Result<String> {
-    let config = manifest::project_config_from_manifest_dir(manifest_dir)?;
+    let config = toml_parser::parse(manifest_dir)?;
     let readme_content = std::fs::read_to_string(readme_path)?;
     let context = UpdateContext::new(config);
     let requests = readme::parse_readme_blocks(&readme_content);

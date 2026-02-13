@@ -137,4 +137,25 @@ mod tests {
         assert_eq!(parse_block_name("<!-- other:tag -->"), None);
         assert_eq!(parse_block_name("not a tag"), None);
     }
+
+    #[test]
+    fn test_parse_readme_blocks_order() {
+        let content = "A\n<!-- automdrs:badges version -->\n<!-- /automdrs -->\nB\n<!-- automdrs:contributors -->\n<!-- /automdrs -->\n";
+        let reqs = parse_readme_blocks(content);
+        assert_eq!(reqs.len(), 2);
+        assert_eq!(reqs[0].name, "badges");
+        assert_eq!(reqs[1].name, "contributors");
+    }
+
+    #[test]
+    fn test_replace_blocks_once() {
+        let content = "Title\n\n<!-- automdrs:badges version -->\n<!-- /automdrs -->\n\nRest";
+        let generated = vec![vec!["line1".to_string(), "line2".to_string()]];
+        let out = replace_blocks_once(content, &generated);
+        assert!(out.contains("<!-- automdrs:badges version -->"));
+        assert!(out.contains("line1"));
+        assert!(out.contains("line2"));
+        assert!(out.contains("<!-- /automdrs -->"));
+        assert!(out.contains("Rest"));
+    }
 }

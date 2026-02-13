@@ -5,16 +5,16 @@
 //! ... `<!-- /automdrs -->` blocks with generated content.
 
 use crate::error::Result;
-use crate::manifest::ProjectConfig;
+use crate::toml_parser::ParsedManifest;
 
-/// Context passed to every block handler (project config, future: readme path, etc.).
+/// Context passed to every block handler (parsed Cargo.toml result, etc.).
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
-    pub config: ProjectConfig,
+    pub config: ParsedManifest,
 }
 
 impl UpdateContext {
-    pub fn new(config: ProjectConfig) -> Self {
+    pub fn new(config: ParsedManifest) -> Self {
         Self { config }
     }
 }
