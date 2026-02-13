@@ -85,7 +85,10 @@ mod tests {
             "<!-- automdrs:badges showCrateVersion=\"true\" docs -->",
             "badges",
         );
-        assert_eq!(opts.get("showCrateVersion").map(String::as_str), Some("true"));
+        assert_eq!(
+            opts.get("showCrateVersion").map(String::as_str),
+            Some("true")
+        );
         assert_eq!(opts.get("docs").map(String::as_str), Some("true"));
     }
 
