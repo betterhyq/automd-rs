@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 
+use crate::error::Result;
+use crate::handler::{BlockHandler, UpdateContext};
 use crate::manifest::ProjectConfig;
 
 /// Badges config: each field is true if that badge is enabled in README.
@@ -12,18 +14,14 @@ pub struct Badges {
     pub repo_stars: bool,
 }
 
-/// Parse `<!-- automdrs:badges version downloads docs ... -->` from README content.
-/// Returns a Badges with each listed name set to true, others false.
-pub fn parse_badges_from_readme(content: &str) -> Badges {
+/// Parse `<!-- automdrs:badges version downloads ... -->` from the opening tag line.
+fn parse_badges_from_open_tag(open_tag: &str) -> Badges {
     let mut enabled: HashSet<&str> = HashSet::new();
-    for line in content.lines() {
-        let line = line.trim();
-        if let Some(rest) = line.strip_prefix("<!-- automdrs:badges") {
-            if let Some(rest) = rest.strip_suffix("-->") {
-                for name in rest.split_whitespace() {
-                    enabled.insert(name);
-                }
-                break;
+    let trimmed = open_tag.trim();
+    if let Some(rest) = trimmed.strip_prefix("<!-- automdrs:badges") {
+        if let Some(rest) = rest.strip_suffix("-->") {
+            for name in rest.split_whitespace() {
+                enabled.insert(name);
             }
         }
     }
@@ -75,4 +73,19 @@ pub fn generate_all(config: &ProjectConfig, badges: &Badges) -> Vec<String> {
         lines.push(generate_repo_stars_badge(&config.github_user, &config.github_repo));
     }
     lines
+}
+
+/// Block handler for `<!-- automdrs:badges ... -->`.
+#[derive(Debug, Default)]
+pub struct BadgesHandler;
+
+impl BlockHandler for BadgesHandler {
+    fn name(&self) -> &str {
+        "badges"
+    }
+
+    fn generate(&self, open_tag_line: &str, context: &UpdateContext) -> Result<Vec<String>> {
+        let badges = parse_badges_from_open_tag(open_tag_line);
+        Ok(generate_all(&context.config, &badges))
+    }
 }

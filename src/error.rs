@@ -13,6 +13,9 @@ pub enum Error {
 
     #[error("Invalid repository URL: {0}")]
     InvalidRepoUrl(String),
+
+    #[error("Block handler '{0}': {1}")]
+    BlockHandler(String, String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
