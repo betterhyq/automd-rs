@@ -1,5 +1,4 @@
-//! Single entry for Cargo.toml parsing: find manifest, parse package name and repository URL,
-//! parse GitHub URL → name, username, repository_name.
+//! Cargo.toml parsing: find manifest → name, username, repository_name.
 
 use crate::error::{Error, Result};
 use c12_parser::{parse_toml, FormatOptions, Formatted};
@@ -7,7 +6,6 @@ use serde::Deserialize;
 use std::path::Path;
 use url::Url;
 
-/// Parsed result: crate name and GitHub user/repo from Cargo.toml.
 #[derive(Debug, Clone)]
 pub struct ParsedManifest {
     pub name: String,
@@ -41,8 +39,6 @@ fn parse_repository_url(repository: &str) -> Result<(String, String)> {
     Ok((username.to_string(), repo.to_string()))
 }
 
-/// Parse Cargo.toml under `manifest_dir`: find manifest, read package name and repository URL,
-/// parse URL to GitHub username and repo name. Single public API for manifest + GitHub parsing.
 pub fn parse(manifest_dir: &Path) -> Result<ParsedManifest> {
     let path = find_cargo_toml::find(manifest_dir, None::<std::path::PathBuf>, None)
         .next()

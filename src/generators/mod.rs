@@ -1,5 +1,4 @@
-//! Generators: one function per block type. Receive config + manifest, return fill strings.
-//! No parsing — callers (handlers) build config from the open tag and call the generator.
+//! Block generators: (config, manifest) → lines. No parsing; handler builds config.
 
 pub mod badges;
 pub mod contributors;

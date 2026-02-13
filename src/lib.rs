@@ -1,6 +1,4 @@
-//! automd-rs: update README blocks from Cargo.toml and handlers.
-//!
-//! Handler dispatches by block name to generators (badges, contributors, …). One handler, one pipeline.
+//! Update README blocks from Cargo.toml; handler dispatches by block name to generators.
 
 pub mod error;
 pub mod generators;
@@ -16,15 +14,11 @@ pub use parser::cargo::{parse as parse_manifest, ParsedManifest};
 
 use std::path::Path;
 
-/// Run the full pipeline with the default handler (dispatches by block name to generators).
 pub fn run(manifest_dir: &Path, readme_path: &Path) -> Result<String> {
     run_with_handler(manifest_dir, readme_path, &DefaultHandler::default())
 }
 
-/// Run with a custom handler (e.g. extend dispatch or replace with your own).
-///
-/// Pipeline: 1) parse Cargo.toml → 2) parse README (block requests) →
-/// 3) for each block, handler generates by name → 4) one-shot replace.
+/// Custom handler: parse Cargo.toml → parse README → generate per block → one-shot replace.
 pub fn run_with_handler(
     manifest_dir: &Path,
     readme_path: &Path,

@@ -1,6 +1,5 @@
-//! CLI entrypoint: resolve Cargo.toml and README from current dir, then run library.
+//! CLI: run from current dir (Cargo.toml + README.md).
 
-use automd_rs;
 use std::path::Path;
 
 fn main() {

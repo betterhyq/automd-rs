@@ -1,3 +1,5 @@
+//! Library error and Result type.
+
 use thiserror::Error;
 
 #[derive(Debug, Error)]

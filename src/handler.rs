@@ -1,6 +1,4 @@
-//! Generic block handler: dispatches by block name to generators.
-//!
-//! One handler uses the `generators` module and selects the generator from the block's name.
+//! Dispatches by block name to generators; parses tag options and fills block body.
 
 use std::collections::HashSet;
 
@@ -9,7 +7,6 @@ use crate::generators::badges::{self as badges_gen, BadgesConfig};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::parser::cargo::ParsedManifest;
 
-/// Context passed to every block handler (parsed Cargo.toml result, etc.).
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
     pub config: ParsedManifest,
@@ -21,9 +18,7 @@ impl UpdateContext {
     }
 }
 
-/// Handler trait: generate receives block name and open tag line, returns lines to fill.
 pub trait BlockHandler: Send + Sync {
-    /// Generate replacement lines for the block body. Dispatcher selects generator by `block_name`.
     fn generate(
         &self,
         block_name: &str,
@@ -33,25 +28,22 @@ pub trait BlockHandler: Send + Sync {
 }
 
 fn parse_badges_config(open_tag: &str) -> BadgesConfig {
-    let mut enabled: HashSet<&str> = HashSet::new();
-    let trimmed = open_tag.trim();
-    if let Some(rest) = trimmed.strip_prefix("<!-- automdrs:badges") {
-        if let Some(rest) = rest.strip_suffix("-->") {
-            for name in rest.split_whitespace() {
-                enabled.insert(name);
-            }
+    let mut on: HashSet<&str> = HashSet::new();
+    let t = open_tag.trim();
+    if let Some(rest) = t.strip_prefix("<!-- automdrs:badges").and_then(|r| r.strip_suffix("-->")) {
+        for w in rest.split_whitespace() {
+            on.insert(w);
         }
     }
     BadgesConfig {
-        version: enabled.contains("version"),
-        downloads: enabled.contains("downloads"),
-        docs: enabled.contains("docs"),
-        commit_activity: enabled.contains("commit_activity"),
-        repo_stars: enabled.contains("repo_stars"),
+        version: on.contains("version"),
+        downloads: on.contains("downloads"),
+        docs: on.contains("docs"),
+        commit_activity: on.contains("commit_activity"),
+        repo_stars: on.contains("repo_stars"),
     }
 }
 
-/// Default handler: selects generator by block name (badges, contributors, ...).
 #[derive(Debug, Default)]
 pub struct DefaultHandler;
 

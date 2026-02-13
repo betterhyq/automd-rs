@@ -1,10 +1,4 @@
-
-
-//! Pipeline: parse README → collect block requests → assign generators → one-shot replace.
-//!
-//! 1. Parse README: discover all `<!-- automdrs:NAME ... -->` blocks (order preserved).
-//! 2. Assign generator per block by name; aggregate all generated content.
-//! 3. Single replacement pass: substitute each block body with aggregated content.
+//! README block parsing and one-pass replacement for `<!-- automdrs:NAME ... -->` blocks.
 
 use crate::error::Result;
 use crate::handler::{BlockHandler, UpdateContext};
@@ -13,33 +7,31 @@ const OPEN_PREFIX: &str = "<!-- automdrs:";
 const OPEN_SUFFIX: &str = "-->";
 const CLOSE_TAG: &str = "<!-- /automdrs -->";
 
-/// One block request parsed from README (name + full open tag line).
 #[derive(Debug, Clone)]
 pub struct BlockRequest {
     pub name: String,
     pub open_tag_line: String,
 }
 
-/// Extract block name from opening tag line, e.g. `<!-- automdrs:badges version -->` -> Some("badges").
+/// Parses block name from line like `<!-- automdrs:badges version -->` → `badges`.
 pub fn parse_block_name(line: &str) -> Option<&str> {
-    let trimmed = line.trim();
-    if !trimmed.starts_with(OPEN_PREFIX) || !trimmed.ends_with(OPEN_SUFFIX) {
+    let t = line.trim();
+    if !t.starts_with(OPEN_PREFIX) || !t.ends_with(OPEN_SUFFIX) {
         return None;
     }
-    let rest = trimmed
-        .strip_prefix(OPEN_PREFIX)?
+    t.strip_prefix(OPEN_PREFIX)?
         .strip_suffix(OPEN_SUFFIX)?
-        .trim();
-    rest.split_whitespace().next()
+        .trim()
+        .split_whitespace()
+        .next()
 }
 
-/// Step 1 (after Cargo.toml): parse README and collect block requests in document order.
+/// Collects all automdrs block requests in document order.
 pub fn parse_readme_blocks(content: &str) -> Vec<BlockRequest> {
     let mut requests = Vec::new();
     let mut in_block = false;
-
     for line in content.lines() {
-        let trimmed = line.trim();
+        let t = line.trim();
         if !in_block {
             if let Some(name) = parse_block_name(line) {
                 in_block = true;
@@ -50,69 +42,64 @@ pub fn parse_readme_blocks(content: &str) -> Vec<BlockRequest> {
             }
             continue;
         }
-        if trimmed == CLOSE_TAG.trim() {
+        if t == CLOSE_TAG.trim() {
             in_block = false;
         }
     }
     requests
 }
 
-/// Step 2: for each request, call handler with block name and open tag; aggregate generated content in order.
+/// Runs handler per request and returns generated lines in order.
 pub fn assign_and_generate(
     requests: &[BlockRequest],
     handler: &dyn BlockHandler,
     context: &UpdateContext,
 ) -> Result<Vec<Vec<String>>> {
-    let mut aggregated = Vec::with_capacity(requests.len());
+    let mut out = Vec::with_capacity(requests.len());
     for req in requests {
-        let lines = handler.generate(&req.name, &req.open_tag_line, context)?;
-        aggregated.push(lines);
+        out.push(handler.generate(&req.name, &req.open_tag_line, context)?);
     }
-    Ok(aggregated)
+    Ok(out)
 }
 
-/// Step 3: one replacement pass — substitute each block body with the corresponding generated lines.
+/// Replaces block bodies with `generated` in one pass. Output order matches block order.
 pub fn replace_blocks_once(content: &str, generated: &[Vec<String>]) -> String {
-    let mut out = String::new();
+    let cap = content.len().saturating_add(512);
+    let mut out = String::with_capacity(cap);
     let mut in_block = false;
-    let mut block_index: usize = 0;
-
+    let mut idx = 0usize;
     for line in content.lines() {
-        let trimmed = line.trim();
-
+        let t = line.trim();
         if !in_block {
             if parse_block_name(line).is_some() {
                 in_block = true;
                 out.push_str(line);
                 out.push('\n');
-                if block_index < generated.len() {
-                    for s in &generated[block_index] {
+                if idx < generated.len() {
+                    for s in &generated[idx] {
                         out.push_str(s);
                         out.push('\n');
                     }
                 }
-                block_index += 1;
+                idx += 1;
                 continue;
             }
             out.push_str(line);
             out.push('\n');
             continue;
         }
-
-        if trimmed == CLOSE_TAG.trim() {
+        if t == CLOSE_TAG.trim() {
             in_block = false;
             out.push_str(line);
             out.push('\n');
         }
     }
-
     if out.ends_with('\n') {
         out.pop();
     }
     out
 }
 
-/// Full update: parse blocks → assign & generate → replace once. (Convenience for run.)
 pub fn update_readme(
     content: &str,
     handler: &dyn BlockHandler,

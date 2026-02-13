@@ -1,8 +1,7 @@
-//! Badge generator: given badge config and manifest, returns lines to fill the block.
+//! Badge block generator: config + manifest → markdown lines.
 
 use crate::parser::cargo::ParsedManifest;
 
-/// Which badges to generate (each field true = include that badge).
 #[derive(Debug, Default, Clone)]
 pub struct BadgesConfig {
     pub version: bool,
@@ -12,9 +11,13 @@ pub struct BadgesConfig {
     pub repo_stars: bool,
 }
 
-/// Returns the lines to fill the badges block. No parsing — caller provides config and manifest.
 pub fn generate(config: &BadgesConfig, manifest: &ParsedManifest) -> Vec<String> {
-    let mut lines = Vec::new();
+    let n = config.version as usize
+        + config.downloads as usize
+        + config.docs as usize
+        + config.commit_activity as usize
+        + config.repo_stars as usize;
+    let mut lines = Vec::with_capacity(n);
     if config.version {
         lines.push(format!("![Crates.io Version](https://img.shields.io/crates/v/{})", manifest.name));
     }
