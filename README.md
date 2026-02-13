@@ -50,5 +50,6 @@ Made by [@YONGQI](https://github.com/betterhyq) 💛
 <!-- /automdrs -->
 
 <!-- automdrs:with-automdrs -->
----<br>_🤖 auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
+---
+<br>_🛠️ auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
 <!-- /automdrs -->

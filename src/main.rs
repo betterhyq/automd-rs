@@ -4,7 +4,7 @@ use log::{warn, trace};
 use std::path::Path;
 
 fn main() {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("trace")).init();
+    // env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("trace")).init();
 
     let manifest_dir = Path::new(".");
     let readme_path = Path::new("README.md");

@@ -9,7 +9,7 @@ pub struct WithAutomdrsConfig {
 
 pub fn generate(config: &WithAutomdrsConfig) -> Vec<String> {
     trace!("config: {:?}", config);
-    vec![format!("---<br>_🤖 auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_")]
+    vec![format!("---\n<br>_🛠️ auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_")]
 }
 
 #[cfg(test)]
