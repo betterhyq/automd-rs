@@ -6,7 +6,7 @@
 //! 2. Assign generator per block by name; aggregate all generated content.
 //! 3. Single replacement pass: substitute each block body with aggregated content.
 
-use crate::error::{Error, Result};
+use crate::error::Result;
 use crate::handler::{BlockHandler, UpdateContext};
 
 const OPEN_PREFIX: &str = "<!-- automdrs:";
