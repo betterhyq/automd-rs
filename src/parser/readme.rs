@@ -1,3 +1,5 @@
+
+
 //! Pipeline: parse README → collect block requests → assign generators → one-shot replace.
 //!
 //! 1. Parse README: discover all `<!-- automdrs:NAME ... -->` blocks (order preserved).
@@ -55,19 +57,15 @@ pub fn parse_readme_blocks(content: &str) -> Vec<BlockRequest> {
     requests
 }
 
-/// Step 2: assign generator per request (by name) and aggregate generated content in order.
+/// Step 2: for each request, call handler with block name and open tag; aggregate generated content in order.
 pub fn assign_and_generate(
     requests: &[BlockRequest],
-    handlers: &[&dyn BlockHandler],
+    handler: &dyn BlockHandler,
     context: &UpdateContext,
 ) -> Result<Vec<Vec<String>>> {
     let mut aggregated = Vec::with_capacity(requests.len());
     for req in requests {
-        let handler = handlers
-            .iter()
-            .find(|h| h.name() == req.name)
-            .ok_or_else(|| Error::BlockHandler(req.name.clone(), "no handler registered".into()))?;
-        let lines = handler.generate(&req.open_tag_line, context)?;
+        let lines = handler.generate(&req.name, &req.open_tag_line, context)?;
         aggregated.push(lines);
     }
     Ok(aggregated)
@@ -117,11 +115,11 @@ pub fn replace_blocks_once(content: &str, generated: &[Vec<String>]) -> String {
 /// Full update: parse blocks → assign & generate → replace once. (Convenience for run.)
 pub fn update_readme(
     content: &str,
-    handlers: &[&dyn BlockHandler],
+    handler: &dyn BlockHandler,
     context: &UpdateContext,
 ) -> Result<String> {
     let requests = parse_readme_blocks(content);
-    let generated = assign_and_generate(&requests, handlers, context)?;
+    let generated = assign_and_generate(&requests, handler, context)?;
     Ok(replace_blocks_once(content, &generated))
 }
 
@@ -159,3 +157,4 @@ mod tests {
         assert!(out.contains("Rest"));
     }
 }
+
