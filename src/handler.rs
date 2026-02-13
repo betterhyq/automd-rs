@@ -6,6 +6,8 @@ use crate::generators::contributors::{self as contributors_gen, ContributorsConf
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
 
+use log::info;
+
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
     pub config: ParsedManifest,
@@ -28,6 +30,7 @@ pub trait BlockHandler: Send + Sync {
 
 fn parse_badges_config(open_tag: &str) -> BadgesConfig {
     let opts = parse_tag_options(open_tag, "badges");
+    info!("opts: {:?}", opts);
     BadgesConfig {
         version: option_bool(&opts, &["showCrateVersion", "version"]),
         downloads: option_bool(&opts, &["showCrateDownloads", "downloads"]),
@@ -39,6 +42,7 @@ fn parse_badges_config(open_tag: &str) -> BadgesConfig {
 
 fn parse_contributors_config(open_tag: &str) -> ContributorsConfig {
     let opts = parse_tag_options(open_tag, "contributors");
+    info!("opts: {:?}", opts);
     ContributorsConfig {
         author: opts.get("author").cloned().unwrap_or_default(),
         license: opts.get("license").cloned().unwrap_or_default(),

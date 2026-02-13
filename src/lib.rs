@@ -29,9 +29,11 @@ pub fn run_with_handler(
     info!("config: {:?}", config);
 
     let readme_content = std::fs::read_to_string(readme_path)?;
+
     let context = UpdateContext::new(config);
     let requests = parser::readme::parse_readme_blocks(&readme_content);
     let generated = parser::readme::assign_and_generate(&requests, handler, &context)?;
+    info!("generated: {:?}", generated);
     let updated = parser::readme::replace_blocks_once(&readme_content, &generated);
     std::fs::write(readme_path, &updated)?;
     Ok(updated)
