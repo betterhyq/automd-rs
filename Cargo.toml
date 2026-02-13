@@ -12,4 +12,6 @@ keywords = [""]
 categories = ["development-tools"]
 
 [dependencies]
+c12-parser = "1.0.1"
 find-cargo-toml = "1.0.0"
+serde = { version = "1.0", features = ["derive"] }
