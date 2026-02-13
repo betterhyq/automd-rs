@@ -48,3 +48,7 @@ Made by [@YONGQI](https://github.com/betterhyq) 💛
 <img src="https://contrib.rocks/image?repo=betterhyq/automd-rs" />
 </a>
 <!-- /automdrs -->
+
+<!-- automdrs:with-automdrs -->
+---<br>_🤖 auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
+<!-- /automdrs -->

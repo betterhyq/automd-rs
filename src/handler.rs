@@ -5,6 +5,7 @@ use crate::generators::badges::{self as badges_gen, BadgesConfig};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
+use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
 
 use log::trace;
 
@@ -49,6 +50,14 @@ fn parse_contributors_config(open_tag: &str) -> ContributorsConfig {
     }
 }
 
+fn parse_with_automdrs_config(open_tag: &str) -> WithAutomdrsConfig {
+    let opts = parse_tag_options(open_tag, "with-automdrs");
+    trace!("with-automdrs config: {:?}", opts);
+    WithAutomdrsConfig {
+        message: opts.get("message").cloned().unwrap_or_default(),
+    }
+}
+
 #[derive(Debug, Default)]
 pub struct DefaultHandler;
 
@@ -69,6 +78,11 @@ impl BlockHandler for DefaultHandler {
                 trace!("parsing contributors config");
                 let config = parse_contributors_config(open_tag_line);
                 Ok(contributors_gen::generate(&config, &context.config))
+            }
+            "with-automdrs" => {
+                trace!("parsing with-automdrs config");
+                let config = parse_with_automdrs_config(open_tag_line);
+                Ok(with_automdrs_gen::generate(&config))
             }
             _ => Ok(vec![]),
         }
