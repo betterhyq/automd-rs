@@ -1,28 +1,29 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Automd-RS",
-  description: "A crate to update your README.md with your Cargo.toml, automatically. Supports badges, contributors, and with-automdrs blocks.",
+  description: "Update README.md from Cargo.toml, automatically. Badges, contributors, install snippets via HTML comment blocks.",
+
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'Block Reference', link: '/guide/block-reference' },
+      { text: 'API', link: '/guide/api' },
     ],
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'Guide',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Getting Started', link: '/guide/getting-started' },
+          { text: 'Block Reference', link: '/guide/block-reference' },
+          { text: 'API Reference', link: '/guide/api' },
         ]
       }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/betterhyq/automd-rs' }
     ]
   }
 })

@@ -1,25 +1,25 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
   name: "Automd-RS"
-  text: "A crate to update your README.md with your Cargo.toml, automatically. Supports badges, contributors, and with-automdrs blocks."
-  tagline: My great project tagline
+  text: "Update README.md from Cargo.toml, automatically"
+  tagline: Badges, contributors, install snippets—via HTML comment blocks
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Getting Started
+      link: /guide/getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Block Reference
+      link: /guide/block-reference
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Badges
+    details: Crates.io version, downloads, docs.rs, GitHub commit activity and stars
+  - title: Contributors
+    details: License line and contrib.rocks image from repository
+  - title: Snippets
+    details: cargo-add and cargo-install commands generated from crate name
+  - title: Extensible
+    details: Implement BlockHandler trait to add your own block types
 ---
-
