@@ -73,7 +73,11 @@ Blocks are HTML comments. Open with `<!-- automdrs:NAME [options] -->`, close wi
 
 ```markdown
 <!-- automdrs:badges showCrateVersion="true" showCrateDownloads="true" showCrateDocs="true" showCommitActivity="true" showRepoStars="true" -->
-...generated badges...
+![Crates.io Version](https://img.shields.io/crates/v/automd-rs)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/automd-rs)
+![docs.rs](https://img.shields.io/docsrs/automd-rs)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/betterhyq/automd-rs)
+![GitHub Repo stars](https://img.shields.io/github/stars/betterhyq/automd-rs)
 <!-- /automdrs -->
 ```
 
@@ -81,7 +85,12 @@ Blocks are HTML comments. Open with `<!-- automdrs:NAME [options] -->`, close wi
 
 ```markdown
 <!-- automdrs:contributors author="YONGQI" license="MIT" -->
-...generated license + contrib.rocks...
+Published under the [MIT](./LICENSE) license.
+Made by [@YONGQI](https://github.com/betterhyq) 💛
+<br><br>
+<a href="https://github.com/betterhyq/automd-rs/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=betterhyq/automd-rs" />
+</a>
 <!-- /automdrs -->
 ```
 
@@ -114,6 +123,9 @@ Made by [@YONGQI](https://github.com/betterhyq) 💛
 <!-- /automdrs -->
 
 <!-- automdrs:with-automdrs -->
+
 ---
-<br>_🛠️ auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
+
+_🤖 auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
+
 <!-- /automdrs -->
