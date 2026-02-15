@@ -1,10 +1,10 @@
 //! CLI: run from current dir (Cargo.toml + README.md).
 
-use log::{warn, trace};
+use log::{trace, warn};
 use std::path::Path;
 
 fn main() {
-    // env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("trace")).init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
 
     let manifest_dir = Path::new(".");
     let readme_path = Path::new("README.md");

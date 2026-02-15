@@ -2,10 +2,10 @@
 
 use crate::error::{Error, Result};
 use c12_parser::{FormatOptions, Formatted, parse_toml};
+use log::trace;
 use serde::Deserialize;
 use std::path::Path;
 use url::Url;
-use log::trace;
 
 #[derive(Debug, Clone)]
 pub struct ParsedManifest {

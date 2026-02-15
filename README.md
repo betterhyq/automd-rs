@@ -21,15 +21,17 @@
 
 **As a dependency** (library):
 
-```bash
-cargo add automd-rs
-```
+
 
 **As a binary** (to run in your project root):
 
-```bash
+<!-- automdrs:cargo-install -->
+
+```sh
 cargo install automd-rs
 ```
+
+<!-- /automdrs -->
 
 ## Usage
 
@@ -126,6 +128,6 @@ Made by [@YONGQI](https://github.com/betterhyq) 💛
 
 ---
 
-_🤖 auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
+_🛠️ auto updated with [automd-rs](https://github.com/betterhyq/automd-rs)_
 
 <!-- /automdrs -->

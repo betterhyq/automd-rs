@@ -2,11 +2,11 @@
 
 use crate::error::Result;
 use crate::generators::badges::{self as badges_gen, BadgesConfig};
+use crate::generators::cargo_install::{self as cargo_install_gen};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
+use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
-use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
-
 use log::trace;
 
 #[derive(Debug, Clone)]
@@ -84,6 +84,10 @@ impl BlockHandler for DefaultHandler {
                 let config = parse_with_automdrs_config(open_tag_line);
                 Ok(with_automdrs_gen::generate(&config))
             }
+            "cargo-install" => {
+                trace!("parsing cargo-install config");
+                Ok(cargo_install_gen::generate(&context.config))
+            }
             _ => Ok(vec![]),
         }
     }
@@ -141,7 +145,11 @@ mod tests {
     fn test_generate_with_automdrs() {
         let h = DefaultHandler::default();
         let out = h
-            .generate("with-automdrs", "<!-- automdrs:with-automdrs -->", &context())
+            .generate(
+                "with-automdrs",
+                "<!-- automdrs:with-automdrs -->",
+                &context(),
+            )
             .unwrap();
         assert_eq!(out.len(), 1);
         assert!(out[0].contains("automd-rs"));
@@ -150,7 +158,9 @@ mod tests {
     #[test]
     fn test_generate_unknown_block() {
         let h = DefaultHandler::default();
-        let out = h.generate("unknown", "<!-- automdrs:unknown -->", &context()).unwrap();
+        let out = h
+            .generate("unknown", "<!-- automdrs:unknown -->", &context())
+            .unwrap();
         assert_eq!(out, Vec::<String>::new());
     }
 }

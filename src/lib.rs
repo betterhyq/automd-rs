@@ -42,7 +42,7 @@ pub fn run_with_handler(
 
     let updated = parser::readme::replace_blocks_once(&readme_content, &generated);
     trace!("updated: {:?}", updated);
-    
+
     std::fs::write(readme_path, &updated)?;
     Ok(updated)
 }
@@ -96,8 +96,11 @@ repository = "https://github.com/a/b.git"
 "#,
         )
         .unwrap();
-        std::fs::write(&readme, "Hi\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\n")
-            .unwrap();
+        std::fs::write(
+            &readme,
+            "Hi\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\n",
+        )
+        .unwrap();
         let result = run(&dir, &readme);
         assert!(result.is_ok());
         let out = result.unwrap();
