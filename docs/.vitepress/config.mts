@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/automd-rs/',
   title: "Automd-RS",
   description: "Update README.md from Cargo.toml, automatically. Badges, contributors, install snippets via HTML comment blocks.",
 
