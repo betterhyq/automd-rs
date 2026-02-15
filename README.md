@@ -21,7 +21,13 @@
 
 **As a dependency** (library):
 
+<!-- automdrs:cargo-add -->
 
+```sh
+cargo add automd-rs
+```
+
+<!-- /automdrs -->
 
 **As a binary** (to run in your project root):
 

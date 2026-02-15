@@ -2,6 +2,7 @@
 
 use crate::error::Result;
 use crate::generators::badges::{self as badges_gen, BadgesConfig};
+use crate::generators::cargo_add::{self as cargo_add_gen};
 use crate::generators::cargo_install::{self as cargo_install_gen};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
@@ -87,6 +88,10 @@ impl BlockHandler for DefaultHandler {
             "cargo-install" => {
                 trace!("parsing cargo-install config");
                 Ok(cargo_install_gen::generate(&context.config))
+            }
+            "cargo-add" => {
+                trace!("parsing cargo-add config");
+                Ok(cargo_add_gen::generate(&context.config))
             }
             _ => Ok(vec![]),
         }
