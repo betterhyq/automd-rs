@@ -3,8 +3,7 @@ layout: home
 
 hero:
   name: "Automd-RS"
-  text: "Update README.md from Cargo.toml, automatically"
-  tagline: Badges, contributors, install snippets—via HTML comment blocks
+  tagline: Update README.md from Cargo.toml, automatically
   actions:
     - theme: brand
       text: Getting Started
