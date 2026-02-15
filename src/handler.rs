@@ -1,4 +1,4 @@
-//! Dispatches by block name to generators; parses tag options and fills block body.
+//! Block dispatcher: parses tag options, routes to generators, fills block body.
 
 use crate::error::Result;
 use crate::generators::badges::{self as badges_gen, BadgesConfig};
@@ -10,6 +10,7 @@ use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
 use log::trace;
 
+/// Context passed to block handlers (parsed Cargo.toml).
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
     pub config: ParsedManifest,
@@ -21,6 +22,7 @@ impl UpdateContext {
     }
 }
 
+/// Trait for generating block content by block name.
 pub trait BlockHandler: Send + Sync {
     fn generate(
         &self,
@@ -59,6 +61,7 @@ fn parse_with_automdrs_config(open_tag: &str) -> WithAutomdrsConfig {
     }
 }
 
+/// Default handler for built-in blocks: badges, contributors, with-automdrs, cargo-install, cargo-add.
 #[derive(Debug, Default)]
 pub struct DefaultHandler;
 

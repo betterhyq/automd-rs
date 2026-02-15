@@ -1,4 +1,4 @@
-//! Library error and Result type.
+//! Error types and Result alias.
 
 use thiserror::Error;
 

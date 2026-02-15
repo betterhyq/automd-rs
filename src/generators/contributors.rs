@@ -1,21 +1,15 @@
-//! Contributors block generator (placeholder).
+//! Contributors block generator: license, author, and contrib.rocks image.
 
 use crate::parser::cargo::ParsedManifest;
 
 use log::trace;
 
+/// Config for contributors block: author and license.
 #[derive(Debug, Default, Clone)]
 pub struct ContributorsConfig {
     pub author: String,
     pub license: String,
 }
-
-// Published under the [MIT](./LICENSE) license.
-// Made by [@YONGQI](https://github.com/betterhyq) 💛
-// <br><br>
-// <a href="https://github.com/betterhyq/automd-rs/graphs/contributors">
-// <img src="https://contrib.rocks/image?repo=betterhyq/automd-rs" />
-// </a>
 
 pub fn generate(config: &ContributorsConfig, manifest: &ParsedManifest) -> Vec<String> {
     trace!("config: {:?}", config);

@@ -1,4 +1,4 @@
-//! CLI: run from current dir (Cargo.toml + README.md).
+//! CLI entry point: run from current directory (Cargo.toml + README.md).
 
 use log::{trace, warn};
 use std::path::Path;

@@ -1,4 +1,4 @@
-//! README block parsing and one-pass replacement for `<!-- automdrs:NAME ... -->` blocks.
+//! README block parsing and one-pass replacement for `<!-- automdrs:NAME ... -->` tags.
 
 use crate::error::Result;
 use crate::handler::{BlockHandler, UpdateContext};
@@ -7,6 +7,7 @@ const OPEN_PREFIX: &str = "<!-- automdrs:";
 const OPEN_SUFFIX: &str = "-->";
 const CLOSE_TAG: &str = "<!-- /automdrs -->";
 
+/// A single automdrs block request parsed from README.
 #[derive(Debug, Clone)]
 pub struct BlockRequest {
     pub name: String,

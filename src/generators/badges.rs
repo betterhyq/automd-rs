@@ -4,6 +4,7 @@ use crate::parser::cargo::ParsedManifest;
 
 use log::trace;
 
+/// Config for badge block: which badges to show.
 #[derive(Debug, Default, Clone)]
 pub struct BadgesConfig {
     pub version: bool,

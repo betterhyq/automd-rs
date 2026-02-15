@@ -1,7 +1,8 @@
-//! With automdrs block generator.
+//! With-automdrs block generator: appends auto-updated footer.
 
 use log::trace;
 
+/// Config for with-automdrs block (e.g. optional message).
 #[derive(Debug, Default, Clone)]
 pub struct WithAutomdrsConfig {
     pub message: String,

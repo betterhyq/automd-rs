@@ -19,7 +19,7 @@ pub fn run(manifest_dir: &Path, readme_path: &Path) -> Result<String> {
     run_with_handler(manifest_dir, readme_path, &DefaultHandler::default())
 }
 
-/// Custom handler: parse Cargo.toml → parse README → generate per block → one-shot replace.
+/// Run with custom handler: parse Cargo.toml → parse README → generate per block → replace once.
 pub fn run_with_handler(
     manifest_dir: &Path,
     readme_path: &Path,

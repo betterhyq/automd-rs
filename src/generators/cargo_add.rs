@@ -1,4 +1,4 @@
-//! Cargo install block generator.
+//! Cargo add block generator.
 
 use crate::parser::cargo::ParsedManifest;
 
