@@ -64,6 +64,7 @@ mod tests {
 [package]
 name = "test-pkg"
 version = "0.1.0"
+description = "d"
 repository = "https://github.com/foo/bar.git"
 "#,
         )
@@ -92,6 +93,7 @@ repository = "https://github.com/foo/bar.git"
 [package]
 name = "run-pkg"
 version = "0.1.0"
+description = "d"
 repository = "https://github.com/a/b.git"
 "#,
         )

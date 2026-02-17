@@ -11,6 +11,7 @@ use url::Url;
 #[derive(Debug, Clone)]
 pub struct ParsedManifest {
     pub name: String,
+    pub description: String,
     pub username: String,
     pub repository_name: String,
 }
@@ -23,6 +24,7 @@ struct CargoToml {
 #[derive(Debug, Deserialize)]
 struct Package {
     name: String,
+    description: String,
     repository: String,
 }
 
@@ -53,11 +55,13 @@ pub fn parse(manifest_dir: &Path) -> Result<ParsedManifest> {
     let toml: Formatted<CargoToml> = parse_toml(&content, Some(FormatOptions::default()))
         .map_err(|e| Error::CargoParse(e.to_string()))?;
     let name = toml.value.package.name;
+    let description = toml.value.package.description;
     trace!("name: {:?}", name);
     trace!("repository: {:?}", toml.value.package.repository);
     let (username, repository_name) = parse_repository_url(&toml.value.package.repository)?;
     Ok(ParsedManifest {
         name,
+        description,
         username,
         repository_name,
     })

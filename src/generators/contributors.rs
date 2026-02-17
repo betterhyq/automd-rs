@@ -36,6 +36,7 @@ mod tests {
         };
         let manifest = ParsedManifest {
             name: "automd-rs".to_string(),
+            description: "d".to_string(),
             username: "betterhyq".to_string(),
             repository_name: "automd-rs".to_string(),
         };

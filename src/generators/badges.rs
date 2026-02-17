@@ -65,6 +65,7 @@ mod tests {
     fn manifest() -> ParsedManifest {
         ParsedManifest {
             name: "my-crate".to_string(),
+            description: "d".to_string(),
             username: "user".to_string(),
             repository_name: "repo".to_string(),
         }

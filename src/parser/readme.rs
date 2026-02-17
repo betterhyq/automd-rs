@@ -165,6 +165,7 @@ mod tests {
         ];
         let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
             name: "x".to_string(),
+            description: "d".to_string(),
             username: "u".to_string(),
             repository_name: "r".to_string(),
         });
@@ -180,6 +181,7 @@ mod tests {
         let content = "P\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\nQ";
         let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
             name: "n".to_string(),
+            description: "d".to_string(),
             username: "u".to_string(),
             repository_name: "r".to_string(),
         });

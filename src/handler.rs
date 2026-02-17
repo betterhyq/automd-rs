@@ -109,6 +109,7 @@ mod tests {
     fn context() -> UpdateContext {
         UpdateContext::new(ParsedManifest {
             name: "test-crate".to_string(),
+            description: "d".to_string(),
             username: "u".to_string(),
             repository_name: "r".to_string(),
         })
