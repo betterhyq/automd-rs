@@ -6,6 +6,7 @@ use crate::generators::cargo_add::{self as cargo_add_gen};
 use crate::generators::cargo_install::{self as cargo_install_gen};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
+use crate::generators::description::{self as description_gen};
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
 use log::trace;
@@ -95,6 +96,10 @@ impl BlockHandler for DefaultHandler {
             "cargo-add" => {
                 trace!("parsing cargo-add config");
                 Ok(cargo_add_gen::generate(&context.config))
+            }
+            "description" => {
+                trace!("parsing description config");
+                Ok(description_gen::generate(&context.config))
             }
             _ => Ok(vec![]),
         }
