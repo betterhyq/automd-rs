@@ -63,7 +63,7 @@ dependencies = [
 
 [[package]]
 name = "automd-rs"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "c12-parser",
  "env_logger",
