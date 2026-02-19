@@ -7,19 +7,22 @@ use crate::generators::cargo_install::{self as cargo_install_gen};
 use crate::generators::contributors::{self as contributors_gen, ContributorsConfig};
 use crate::generators::with_automdrs::{self as with_automdrs_gen, WithAutomdrsConfig};
 use crate::generators::description::{self as description_gen};
+use crate::generators::file::{self as file_gen};
 use crate::parser::cargo::ParsedManifest;
 use crate::parser::tag_options::{option_bool, parse_tag_options};
-use log::trace;
+use log::{trace, info};
 
 /// Context passed to block handlers (parsed Cargo.toml).
 #[derive(Debug, Clone)]
 pub struct UpdateContext {
     pub config: ParsedManifest,
+    /// Crate root directory for resolving relative paths (e.g. in `file` block).
+    pub manifest_dir: std::path::PathBuf,
 }
 
 impl UpdateContext {
-    pub fn new(config: ParsedManifest) -> Self {
-        Self { config }
+    pub fn new(config: ParsedManifest, manifest_dir: std::path::PathBuf) -> Self {
+        Self { config, manifest_dir }
     }
 }
 
@@ -101,6 +104,12 @@ impl BlockHandler for DefaultHandler {
                 trace!("parsing description config");
                 Ok(description_gen::generate(&context.config))
             }
+            "file" => {
+                info!("parsing file config");
+                let opts = parse_tag_options(open_tag_line, "file");
+                let src = opts.get("src").cloned().unwrap_or_default();
+                Ok(file_gen::generate(&context.manifest_dir, &src)?)
+            }
             _ => Ok(vec![]),
         }
     }
@@ -112,12 +121,15 @@ mod tests {
     use crate::parser::cargo::ParsedManifest;
 
     fn context() -> UpdateContext {
-        UpdateContext::new(ParsedManifest {
-            name: "test-crate".to_string(),
-            description: "d".to_string(),
-            username: "u".to_string(),
-            repository_name: "r".to_string(),
-        })
+        UpdateContext::new(
+            ParsedManifest {
+                name: "test-crate".to_string(),
+                description: "d".to_string(),
+                username: "u".to_string(),
+                repository_name: "r".to_string(),
+            },
+            std::path::PathBuf::from("."),
+        )
     }
 
     #[test]
@@ -176,5 +188,29 @@ mod tests {
             .generate("unknown", "<!-- automdrs:unknown -->", &context())
             .unwrap();
         assert_eq!(out, Vec::<String>::new());
+    }
+
+    #[test]
+    fn test_generate_file() {
+        let manifest_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let ctx = UpdateContext::new(
+            ParsedManifest {
+                name: "test".to_string(),
+                description: "d".to_string(),
+                username: "u".to_string(),
+                repository_name: "r".to_string(),
+            },
+            manifest_dir.to_path_buf(),
+        );
+        let h = DefaultHandler::default();
+        let out = h
+            .generate(
+                "file",
+                "<!-- automdrs:file src=\"./src/main.rs\" -->",
+                &ctx,
+            )
+            .unwrap();
+        assert!(!out.is_empty());
+        assert_eq!(out[0], "```rust");
     }
 }

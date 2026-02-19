@@ -163,12 +163,15 @@ mod tests {
                 open_tag_line: "<!-- automdrs:unknown -->".to_string(),
             },
         ];
-        let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
-            name: "x".to_string(),
-            description: "d".to_string(),
-            username: "u".to_string(),
-            repository_name: "r".to_string(),
-        });
+        let ctx = crate::handler::UpdateContext::new(
+            crate::parser::cargo::ParsedManifest {
+                name: "x".to_string(),
+                description: "d".to_string(),
+                username: "u".to_string(),
+                repository_name: "r".to_string(),
+            },
+            std::path::PathBuf::from("."),
+        );
         let handler = crate::handler::DefaultHandler::default();
         let out = assign_and_generate(&requests, &handler, &ctx).unwrap();
         assert_eq!(out.len(), 2);
@@ -179,12 +182,15 @@ mod tests {
     #[test]
     fn test_update_readme() {
         let content = "P\n<!-- automdrs:with-automdrs -->\n<!-- /automdrs -->\nQ";
-        let ctx = crate::handler::UpdateContext::new(crate::parser::cargo::ParsedManifest {
-            name: "n".to_string(),
-            description: "d".to_string(),
-            username: "u".to_string(),
-            repository_name: "r".to_string(),
-        });
+        let ctx = crate::handler::UpdateContext::new(
+            crate::parser::cargo::ParsedManifest {
+                name: "n".to_string(),
+                description: "d".to_string(),
+                username: "u".to_string(),
+                repository_name: "r".to_string(),
+            },
+            std::path::PathBuf::from("."),
+        );
         let out = update_readme(content, &crate::handler::DefaultHandler::default(), &ctx).unwrap();
         assert!(out.contains("automd-rs"));
         assert!(out.contains("P"));

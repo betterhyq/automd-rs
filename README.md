@@ -44,6 +44,7 @@ Requires `repository = "https://github.com/owner/repo"` in Cargo.toml.
 | `contributors` | License + contrib.rocks image |
 | `with-automdrs` | Footer line |
 | `cargo-add` / `cargo-install` | Add/install snippet |
+| `file` | Embed file content (e.g. `src="./src/main.rs"`) |
 
 See [Block Reference](https://betterhyq.github.io/automd-rs/guide/block-reference) for options.
 
@@ -55,6 +56,31 @@ run(Path::new("."), Path::new("README.md"))?;
 ```
 
 Extend via `BlockHandler` trait. See [API Reference](https://betterhyq.github.io/automd-rs/guide/api).
+
+## Usage
+
+<!-- automdrs:file src="./src/main.rs" -->
+```rust
+//! CLI entry point: run from current directory (Cargo.toml + README.md).
+
+use log::{trace, warn};
+use std::path::Path;
+
+fn main() {
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+
+    let manifest_dir = Path::new(".");
+    let readme_path = Path::new("README.md");
+    trace!("manifest_dir: {:?}", manifest_dir);
+    trace!("readme_path: {:?}", readme_path);
+
+    if let Err(e) = automd_rs::run(manifest_dir, readme_path) {
+        warn!("error: {}", e);
+        std::process::exit(1);
+    }
+}
+```
+<!-- /automdrs -->
 
 ## License
 

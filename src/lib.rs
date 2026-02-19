@@ -31,7 +31,7 @@ pub fn run_with_handler(
     let readme_content = std::fs::read_to_string(readme_path)?;
     trace!("readme_content: {:?}", readme_content);
 
-    let context = UpdateContext::new(config);
+    let context = UpdateContext::new(config, manifest_dir.to_path_buf());
     trace!("context: {:?}", context);
 
     let requests = parser::readme::parse_readme_blocks(&readme_content);
