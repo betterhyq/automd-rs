@@ -1,6 +1,6 @@
 [package]
 name = "automd-rs"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["YONGQI <betterhyq@qq.com>"]
 edition = "2024"
 description = "It's a crate to update your README.md with your Cargo.toml, automatically. Supports badges, contributors, and with-automdrs blocks."
