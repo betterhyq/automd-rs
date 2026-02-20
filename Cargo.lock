@@ -157,9 +157,12 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "find-cargo-toml"
-version = "1.0.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a569f721899c180b24afe704216742294ab7eec5d0eb91920774b19c7ae26b8a"
+checksum = "0e4aecdcc6966b4dbcac42f1b6a656e9244de7fabf143ec04bf2e0595954cbec"
+dependencies = [
+ "urlogger",
+]
 
 [[package]]
 name = "form_urlencoded"
@@ -679,6 +682,12 @@ dependencies = [
  "percent-encoding",
  "serde",
 ]
+
+[[package]]
+name = "urlogger"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "152240b51591b7142b70cfee7f7aa771ddad9fc191b160b44d2474ebc8589ad4"
 
 [[package]]
 name = "utf8_iter"
