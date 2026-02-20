@@ -21,7 +21,7 @@ path = "src/main.rs"
 
 [dependencies]
 c12-parser = "1.0.1"
-find-cargo-toml = "1.0.0"
+find-cargo-toml = "1.0.1"
 serde = { version = "1.0", features = ["derive"] }
 url = "2.5.8"
 thiserror = "2.0"
